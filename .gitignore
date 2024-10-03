@@ -73,6 +73,7 @@ web_modules/
 .yarn-integrity
 
 # Los .env fueron removidos por fines prácticos, la idea es usar un gestor de credenciales (Hashicorp Vault, Amazon SecretManager...)
+# y así no exponer data sensible en los repositorios
 # .env
 # .env.development.local
 # .env.test.local

@@ -1,9 +1,13 @@
-import { Module, OnModuleInit } from '@nestjs/common';
+import { Logger, Module, OnModuleInit } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
+import { AppController } from './app.controller';
+import { AppService } from './app.service';
 
 @Module({
+  controllers: [AppController],
+  providers: [AppService],
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
@@ -26,6 +30,7 @@ import { DataSource } from 'typeorm';
   ],
 })
 export class AppModule implements OnModuleInit {
+  private readonly logger = new Logger(AppModule.name);
   constructor(private dataSource: DataSource) {}
 
   // Este hook se llama cuando el módulo está listo
@@ -33,9 +38,9 @@ export class AppModule implements OnModuleInit {
     try {
       // Verificar si la conexión es exitosa
       await this.dataSource.query('SELECT 1');
-      console.log('Conexión a la base de datos exitosa');
+      this.logger.log('Database connection successful');
     } catch (error) {
-      console.error('Error al conectarse a la base de datos:', error);
+      this.logger.error('Error connecting to the database:', error);
     }
   }
 }
