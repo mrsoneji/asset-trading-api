@@ -4,6 +4,10 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { UserModule } from './modules/users/user.module';
+import { OrderModule } from './modules/orders/order.module';
+import { MarketDataModule } from './modules/marketdata/marketdata.module';
+import { InstrumentModule } from './modules/instruments/instrument.module';
 
 @Module({
   controllers: [AppController],
@@ -27,16 +31,18 @@ import { AppService } from './app.service';
         synchronize: false,
       }),
     }),
+    UserModule,
+    OrderModule,
+    MarketDataModule,
+    InstrumentModule,
   ],
 })
 export class AppModule implements OnModuleInit {
   private readonly logger = new Logger(AppModule.name);
   constructor(private dataSource: DataSource) {}
 
-  // Este hook se llama cuando el módulo está listo
   async onModuleInit() {
     try {
-      // Verificar si la conexión es exitosa
       await this.dataSource.query('SELECT 1');
       this.logger.log('Database connection successful');
     } catch (error) {
