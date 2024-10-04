@@ -1,8 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { OrderService } from './order.service'; // Asegúrate de que la ruta sea correcta
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { Order } from '../entities/order.entity'; // Asegúrate de que la ruta sea correcta
 import { Repository } from 'typeorm';
+import { Order } from '../entities/order.entity';
+import { OrderService } from './order.service';
 
 describe('OrderService', () => {
   let service: OrderService;

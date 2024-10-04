@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Order } from '../entities/order.entity'; // Asegúrate de que la ruta sea correcta
+import { Order } from '../entities/order.entity';
 
 @Injectable()
 export class OrderService {
@@ -24,6 +24,14 @@ export class OrderService {
   // Método para obtener una orden por ID
   async findOne(id: number): Promise<Order> {
     return this.orderRepository.findOneBy({ id });
+  }
+
+  async findByUserId(userid: number): Promise<Order[]> {
+    return this.orderRepository.find({
+      where: { userid },
+      relations: ['instrument'],
+      order: { id: 'ASC' },
+    });
   }
 
   // Método para actualizar una orden

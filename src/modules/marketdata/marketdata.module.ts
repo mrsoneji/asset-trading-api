@@ -6,5 +6,6 @@ import { MarketDataService } from './services/marketdata.service';
 @Module({
   imports: [TypeOrmModule.forFeature([MarketData])],
   providers: [MarketDataService],
+  exports: [MarketDataService],
 })
 export class MarketDataModule {}

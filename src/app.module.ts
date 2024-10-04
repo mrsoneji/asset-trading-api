@@ -8,6 +8,7 @@ import { UserModule } from './modules/users/user.module';
 import { OrderModule } from './modules/orders/order.module';
 import { MarketDataModule } from './modules/marketdata/marketdata.module';
 import { InstrumentModule } from './modules/instruments/instrument.module';
+import { WalletModule } from './modules/wallet/wallet.module';
 
 @Module({
   controllers: [AppController],
@@ -35,6 +36,7 @@ import { InstrumentModule } from './modules/instruments/instrument.module';
     OrderModule,
     MarketDataModule,
     InstrumentModule,
+    WalletModule,
   ],
 })
 export class AppModule implements OnModuleInit {

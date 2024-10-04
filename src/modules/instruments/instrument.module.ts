@@ -6,5 +6,6 @@ import { InstrumentService } from './services/instrument.service';
 @Module({
   imports: [TypeOrmModule.forFeature([Instrument])],
   providers: [InstrumentService],
+  exports: [InstrumentService],
 })
 export class InstrumentModule {}

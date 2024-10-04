@@ -17,4 +17,11 @@ export class MarketDataService {
   async findOne(id: number): Promise<MarketData> {
     return this.marketDataRepository.findOneBy({ id });
   }
+
+  async findByInstrumentId(instrumentid: number): Promise<MarketData> {
+    return this.marketDataRepository.findOne({
+      where: { instrumentid },
+      order: { date: 'DESC' }, // Ordena por 'datetime' o el campo que prefieras, en orden descendente
+    });
+  }
 }

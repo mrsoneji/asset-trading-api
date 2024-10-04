@@ -1,12 +1,20 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Instrument } from '@modules/instruments/entities/instrument.entity';
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  ManyToOne,
+  JoinColumn,
+} from 'typeorm';
 
 @Entity('orders')
 export class Order {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ type: 'int' })
-  instrumentid: number;
+  @ManyToOne(() => Instrument)
+  @JoinColumn({ name: 'instrumentid' })
+  instrument: Instrument;
 
   @Column({ type: 'int' })
   userid: number;
