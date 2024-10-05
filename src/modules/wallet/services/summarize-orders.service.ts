@@ -1,11 +1,10 @@
 import { Order } from '@modules/orders/entities/order.entity';
 import { Injectable } from '@nestjs/common';
-import { AssetDTO } from '../dtos/asset.dto';
 
 @Injectable()
 export class SummarizeOrders {
-  async execute(orders: Order[]): Promise<AssetDTO[]> {
-    const summarizedOrders: AssetDTO[] = orders.reduce((acc, order) => {
+  async execute(orders: Order[]): Promise<Order[]> {
+    const summarizedOrders: Order[] = orders.reduce((acc, order) => {
       const { ticker, type, id } = order.instrument;
       const { status } = order;
 
@@ -19,7 +18,7 @@ export class SummarizeOrders {
       }
 
       // Buscamos si ya existe una orden con el mismo ticker en el array
-      const existingOrder = acc.find((o) => o.instrumentid === id);
+      const existingOrder = acc.find((o) => o.instrument.id === id);
 
       if (existingOrder) {
         // Si ya existe, acumulamos el `size` y `price` en la orden existente
@@ -28,16 +27,14 @@ export class SummarizeOrders {
       } else {
         // Si no existe, agregamos la nueva orden al array acumulador
         acc.push({
-          ticker,
+          ...order,
           size: order.size,
           price: order.price * order.size,
-          instrumentid: order.instrument.id,
-          daily_return: 0, // Inicializamos con 0 o cualquier valor que corresponda
         });
       }
 
       return acc;
-    }, [] as AssetDTO[]);
+    }, [] as Order[]);
 
     // Convertimos el objeto en un array
     return summarizedOrders;

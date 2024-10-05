@@ -8,6 +8,7 @@ import { Order } from '@modules/orders/entities/order.entity';
 import { GetInstrumentReturnService } from '../services/get-instrument-return.service';
 import { SummarizeOrders } from '../services/summarize-orders.service';
 import { AssetDTO } from '../dtos/asset.dto';
+import { PortfolioDTO } from '../dtos/portfolio.dto';
 
 @Injectable()
 export class WalletUseCase {
@@ -21,11 +22,11 @@ export class WalletUseCase {
     private readonly summarizeOrders: SummarizeOrders,
   ) {}
 
-  async getWalletData(userId: number) {
+  async getWalletData(userId: number): Promise<PortfolioDTO> {
     const orders: Order[] = await this.orderService.findByUserId(userId);
 
     // Uso del resumen
-    const summarizedOrders: AssetDTO[] = await this.summarizeOrders.execute(
+    const summarizedOrders: Order[] = await this.summarizeOrders.execute(
       orders,
     );
 

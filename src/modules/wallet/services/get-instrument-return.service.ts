@@ -1,9 +1,9 @@
-import { Instrument } from '@modules/instruments/entities/instrument.entity';
 import { InstrumentService } from '@modules/instruments/services/instrument.service';
 import { MarketData } from '@modules/marketdata/entities/marketdata.entity';
 import { MarketDataService } from '@modules/marketdata/services/marketdata.service';
 import { Injectable } from '@nestjs/common';
 import { AssetDTO } from '../dtos/asset.dto';
+import { Order } from '@modules/orders/entities/order.entity';
 
 @Injectable()
 export class GetInstrumentReturnService {
@@ -12,28 +12,23 @@ export class GetInstrumentReturnService {
     private readonly instrumentService: InstrumentService,
   ) {}
 
-  async execute(assets: AssetDTO[]): Promise<AssetDTO[]> {
+  async execute(orders: Order[]): Promise<AssetDTO[]> {
     const returnValue: AssetDTO[] = [];
 
-    for (const e of assets) {
-      const { instrumentid } = e;
-
-      const instrument: Instrument = await this.instrumentService.findOne(
-        instrumentid,
-      );
-
-      if (!instrument) {
-        throw new Error('Instrument not found');
-      }
+    for (const e of orders) {
+      const { instrument } = e;
 
       // Busca el market data relacionado con el instrumento
       const marketData: MarketData =
-        await this.marketDataService.findByInstrumentId(instrumentid);
+        await this.marketDataService.findByInstrumentId(instrument.id);
 
       if (!marketData) {
         returnValue.push({
-          ...e,
-          daily_return: 0, // o algún valor predeterminado
+          instrumentid: instrument.id,
+          price: 0,
+          size: e.size,
+          ticker: instrument.ticker,
+          daily_return: 0,
         });
         continue; // Salta al siguiente elemento si no hay market data
       }
@@ -48,7 +43,10 @@ export class GetInstrumentReturnService {
       const daily_return = ((close - previousclose) / previousclose) * 100;
 
       returnValue.push({
-        ...e,
+        instrumentid: instrument.id,
+        price: marketData.close,
+        size: e.size,
+        ticker: instrument.ticker,
         daily_return,
       });
     }

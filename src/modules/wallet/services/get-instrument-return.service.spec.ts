@@ -2,9 +2,9 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { GetInstrumentReturnService } from './get-instrument-return.service'; // Ajusta la ruta según tu estructura de carpetas
 import { InstrumentService } from '@modules/instruments/services/instrument.service';
 import { MarketDataService } from '@modules/marketdata/services/marketdata.service';
-import { AssetDTO } from '../dtos/asset.dto';
 import { Instrument } from '@modules/instruments/entities/instrument.entity';
 import { MarketData } from '@modules/marketdata/entities/marketdata.entity';
+import { Order } from '@modules/orders/entities/order.entity';
 
 describe('GetInstrumentReturnService', () => {
   let getInstrumentReturnService: GetInstrumentReturnService;
@@ -36,20 +36,28 @@ describe('GetInstrumentReturnService', () => {
   });
 
   it('should calculate daily return for assets', async () => {
-    const assets: AssetDTO[] = [
+    const assets: Partial<Order>[] = [
       {
-        instrumentid: 1,
-        ticker: 'AAPL',
+        instrument: {
+          marketData: null,
+          name: '',
+          ticker: 'AAPL',
+          type: '',
+          id: 1,
+        },
         size: 50,
         price: 930,
-        daily_return: 0,
       },
       {
-        instrumentid: 2,
-        ticker: 'GOOGL',
+        instrument: {
+          marketData: null,
+          name: '',
+          ticker: 'GOOGL',
+          type: '',
+          id: 2,
+        },
         size: 30,
         price: 940,
-        daily_return: 0,
       },
     ];
 
@@ -66,52 +74,38 @@ describe('GetInstrumentReturnService', () => {
     mockInstrumentService.findOne.mockResolvedValue(mockInstrument);
     mockMarketDataService.findByInstrumentId.mockResolvedValue(mockMarketData);
 
-    const result = await getInstrumentReturnService.execute(assets);
+    const result = await getInstrumentReturnService.execute(assets as Order[]);
 
     expect(result).toEqual([
       {
         instrumentid: 1,
+        daily_return: 20,
         ticker: 'AAPL',
         size: 50,
-        price: 930,
-        daily_return: 20,
+        price: 120,
       }, // ((120-100)/100)*100 = 20%
       {
         instrumentid: 2,
+        daily_return: 20,
         ticker: 'GOOGL',
         size: 30,
-        price: 940,
-        daily_return: 20,
+        price: 120,
       }, // ((120-100)/100)*100 = 20%
     ]);
   });
 
-  it('should handle instrument not found', async () => {
-    const assets: AssetDTO[] = [
-      {
-        instrumentid: 1,
-        ticker: 'AAPL',
-        size: 50,
-        price: 930,
-        daily_return: 0,
-      },
-    ];
-
-    mockInstrumentService.findOne.mockResolvedValue(null);
-
-    await expect(getInstrumentReturnService.execute(assets)).rejects.toThrow(
-      'Instrument not found',
-    );
-  });
-
   it('should handle market data not found', async () => {
-    const assets: AssetDTO[] = [
+    const assets: Partial<Order>[] = [
       {
-        instrumentid: 1,
-        ticker: 'AAPL',
+        instrument: {
+          marketData: null,
+          name: '',
+          ticker: 'AAPL',
+          type: '',
+          id: 1,
+        },
         size: 50,
         price: 930,
-        daily_return: 0,
       },
     ];
 
@@ -123,27 +117,31 @@ describe('GetInstrumentReturnService', () => {
     mockInstrumentService.findOne.mockResolvedValue(mockInstrument);
     mockMarketDataService.findByInstrumentId.mockResolvedValue(null);
 
-    const result = await getInstrumentReturnService.execute(assets);
+    const result = await getInstrumentReturnService.execute(assets as Order[]);
 
     expect(result).toEqual([
       {
-        instrumentid: 1,
         ticker: 'AAPL',
         size: 50,
-        price: 930,
         daily_return: 0,
+        instrumentid: 1,
+        price: 0,
       },
     ]);
   });
 
   it('should throw error if previous close is not available', async () => {
-    const assets: AssetDTO[] = [
+    const assets: Partial<Order>[] = [
       {
-        instrumentid: 1,
-        ticker: 'AAPL',
+        instrument: {
+          marketData: null,
+          name: '',
+          ticker: 'AAPL',
+          type: '',
+          id: 1,
+        },
         size: 50,
         price: 930,
-        daily_return: 0,
       },
     ];
 
@@ -160,8 +158,8 @@ describe('GetInstrumentReturnService', () => {
     mockInstrumentService.findOne.mockResolvedValue(mockInstrument);
     mockMarketDataService.findByInstrumentId.mockResolvedValue(mockMarketData);
 
-    await expect(getInstrumentReturnService.execute(assets)).rejects.toThrow(
-      'Previous close is not available or zero',
-    );
+    await expect(
+      getInstrumentReturnService.execute(assets as Order[]),
+    ).rejects.toThrow('Previous close is not available or zero');
   });
 });

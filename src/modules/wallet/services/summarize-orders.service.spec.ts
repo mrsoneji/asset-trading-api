@@ -16,47 +16,83 @@ describe('SummarizeOrders', () => {
         size: 50,
         price: 930,
         status: 'FILLED',
-        instrument: { id: 1, ticker: 'AAPL', type: 'ACCIONES', name: '' }, // Asegúrate de que el objeto instrument sea correcto
+        instrument: {
+          id: 1,
+          ticker: 'AAPL',
+          type: 'ACCIONES',
+          name: '',
+          marketData: null,
+        },
       },
       {
         id: 2,
         size: 30,
         price: 940,
         status: 'FILLED',
-        instrument: { id: 1, ticker: 'AAPL', type: 'ACCIONES', name: '' },
+        instrument: {
+          id: 1,
+          ticker: 'AAPL',
+          type: 'ACCIONES',
+          name: '',
+          marketData: null,
+        },
       },
       {
         id: 3,
         size: 20,
         price: 950,
         status: 'REJECTED',
-        instrument: { id: 2, ticker: 'GOOGL', type: 'ACCIONES', name: '' },
+        instrument: {
+          id: 2,
+          ticker: 'GOOGL',
+          type: 'ACCIONES',
+          name: '',
+          marketData: null,
+        },
       },
       {
         id: 4,
         size: 10,
         price: 500,
         status: 'CANCELLED',
-        instrument: { id: 3, ticker: 'AMZN', type: 'ACCIONES', name: '' },
+        instrument: {
+          id: 3,
+          ticker: 'AMZN',
+          type: 'ACCIONES',
+          name: '',
+          marketData: null,
+        },
       },
       {
         id: 5,
         size: 5,
         price: 1000,
         status: 'FILLED',
-        instrument: { id: 4, ticker: 'TSLA', type: 'NO ACCIONES', name: '' },
+        instrument: {
+          id: 4,
+          ticker: 'TSLA',
+          type: 'NO ACCIONES',
+          name: '',
+          marketData: null,
+        },
       },
     ];
 
-    const result: AssetDTO[] = await summarizeOrders.execute(orders as Order[]);
+    const result: Order[] = await summarizeOrders.execute(orders as Order[]);
 
     expect(result).toEqual([
       {
-        ticker: 'AAPL',
+        id: 1,
         size: 80,
         price: 74700,
-        instrumentid: 1,
-        daily_return: 0,
+        status: 'FILLED',
+        instrument: {
+          id: 1,
+          marketData: null,
+          name: '',
+          ticker: 'AAPL',
+          type: 'ACCIONES',
+        },
       },
     ]);
   });
@@ -68,18 +104,30 @@ describe('SummarizeOrders', () => {
         size: 50,
         price: 930,
         status: 'REJECTED',
-        instrument: { id: 1, ticker: 'AAPL', type: 'ACCIONES', name: '' },
+        instrument: {
+          id: 1,
+          ticker: 'AAPL',
+          type: 'ACCIONES',
+          name: '',
+          marketData: null,
+        },
       },
       {
         id: 2,
         size: 30,
         price: 940,
         status: 'CANCELLED',
-        instrument: { id: 1, ticker: 'AAPL', type: 'ACCIONES', name: '' },
+        instrument: {
+          id: 1,
+          ticker: 'AAPL',
+          type: 'ACCIONES',
+          name: '',
+          marketData: null,
+        },
       },
     ];
 
-    const result: AssetDTO[] = await summarizeOrders.execute(orders as Order[]);
+    const result: Order[] = await summarizeOrders.execute(orders as Order[]);
 
     expect(result).toEqual([]);
   });
@@ -91,11 +139,17 @@ describe('SummarizeOrders', () => {
         size: 50,
         price: 930,
         status: 'FILLED',
-        instrument: { id: 1, ticker: 'AAPL', type: 'NO ACCIONES', name: '' },
+        instrument: {
+          id: 1,
+          ticker: 'AAPL',
+          type: 'NO ACCIONES',
+          name: '',
+          marketData: null,
+        },
       },
     ];
 
-    const result: AssetDTO[] = await summarizeOrders.execute(orders as Order[]);
+    const result: Order[] = await summarizeOrders.execute(orders as Order[]);
 
     expect(result).toEqual([]);
   });

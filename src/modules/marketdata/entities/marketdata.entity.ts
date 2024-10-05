@@ -1,12 +1,13 @@
 // market-data.entity.ts
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { Instrument } from '@modules/instruments/entities/instrument.entity';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from 'typeorm';
 
 @Entity('marketdata')
 export class MarketData {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({ name: 'instrumentid' })
   instrumentid: number;
 
   @Column('numeric', { precision: 10, scale: 2 })
@@ -26,4 +27,8 @@ export class MarketData {
 
   @Column('date')
   date: Date;
+
+  @ManyToOne(() => Instrument, (instrument) => instrument.marketData)
+  @JoinColumn({ name: 'instrumentid', referencedColumnName: 'id' })
+  instrument: Instrument;
 }
