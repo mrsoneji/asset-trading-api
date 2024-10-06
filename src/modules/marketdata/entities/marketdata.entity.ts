@@ -1,6 +1,13 @@
 // market-data.entity.ts
 import { Instrument } from '@modules/instruments/entities/instrument.entity';
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from 'typeorm';
+import { Exclude } from 'class-transformer';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  ManyToOne,
+  JoinColumn,
+} from 'typeorm';
 
 @Entity('marketdata')
 export class MarketData {

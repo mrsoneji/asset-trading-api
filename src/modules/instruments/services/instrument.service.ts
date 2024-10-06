@@ -3,7 +3,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Instrument } from '../entities/instrument.entity';
 import { InstrumentDTO } from '../dtos/instrument.dto';
-import { MarketData } from '@modules/marketdata/entities/marketdata.entity';
 
 @Injectable()
 export class InstrumentService {
@@ -27,7 +26,7 @@ export class InstrumentService {
     SELECT 
       instrument.*, 
       latestMarketData.close, 
-      latestMarketData.previousclose as previousClose
+      latestMarketData.previousclose
     FROM 
       instruments instrument 
     LEFT JOIN 
@@ -60,10 +59,17 @@ export class InstrumentService {
         : null;
 
       return {
-        ...instrument,
-        close: latestMarketData ? latestMarketData.close : 0,
-        previousClose: latestMarketData ? latestMarketData.previousClose : 0,
-        dailyReturn: 0,
+        id: instrument.id,
+        ticker: instrument.ticker,
+        name: instrument.name,
+        type: instrument.type,
+        close: instrument.close,
+        previousClose: instrument.previousclose,
+        dailyReturn: latestMarketData
+          ? ((instrument.close - instrument.previousclose) /
+          instrument.previousclose) *
+            100
+          : 0,
       } as InstrumentDTO;
     });
   }

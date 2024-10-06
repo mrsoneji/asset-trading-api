@@ -15,6 +15,8 @@ async function bootstrap() {
       .setDescription(
         'This API facilitates the search for investment assets based on user-defined criteria such as ticker symbols or asset names. It returns a list of similar assets, enabling users to make informed investment decisions quickly.',
       )
+      .addBearerAuth()
+      .addSecurityRequirements('bearer')
       .setVersion('1.0')
       .build();
 
