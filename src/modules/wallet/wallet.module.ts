@@ -8,6 +8,8 @@ import { WalletUseCase } from './use-cases/wallet.use-case';
 import { BalanceAccordingMovementService } from './services/balance-according-movement.service';
 import { GetInstrumentReturnService } from './services/get-instrument-return.service';
 import { SummarizeOrders } from './services/summarize-orders.service';
+import { JwtModule } from '@nestjs/jwt';
+import { jwtConstants } from '@modules/auth/constants';
 
 @Module({
   providers: [
@@ -16,7 +18,17 @@ import { SummarizeOrders } from './services/summarize-orders.service';
     GetInstrumentReturnService,
     SummarizeOrders,
   ],
-  imports: [UserModule, OrderModule, MarketDataModule, InstrumentModule],
+  imports: [
+    UserModule,
+    OrderModule,
+    MarketDataModule,
+    InstrumentModule,
+    JwtModule.register({
+      global: true,
+      secret: jwtConstants.secret,
+      signOptions: { expiresIn: 'none' },
+    }),
+  ],
   controllers: [WalletController],
   exports: [WalletUseCase],
 })
