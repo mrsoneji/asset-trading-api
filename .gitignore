@@ -72,12 +72,13 @@ web_modules/
 # Yarn Integrity file
 .yarn-integrity
 
-# dotenv environment variable files
-.env
-.env.development.local
-.env.test.local
-.env.production.local
-.env.local
+# Los .env fueron removidos por fines prácticos, la idea es usar un gestor de credenciales (Hashicorp Vault, Amazon SecretManager...)
+# y así no exponer data sensible en los repositorios
+# .env
+# .env.development.local
+# .env.test.local
+# .env.production.local
+# .env.local
 
 # parcel-bundler cache (https://parceljs.org/)
 .cache
