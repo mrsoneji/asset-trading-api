@@ -49,6 +49,11 @@ $ pnpm run start:prod
 $ pnpm run test
 ```
 
+## API Documentation
+
+- Se habilitó un Swagger Doc que se puede acceder por http://localhost:3000/api
+- Los .env para producción deberían agregarse en un Secret Manager o HashiCorp Vault, no es buena práctica publicar los .env, pero al ser una prueba técnica tiene sentido hacerlo.
+
 # cocos-challenge-backend
 
 **Resumen:**
