@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { WalletController } from './controllers/wallet.controller';
 import { UserModule } from '../users/user.module';
 import { OrderModule } from '../orders/order.module';
@@ -20,7 +20,7 @@ import { jwtConstants } from '@modules/auth/constants';
   ],
   imports: [
     UserModule,
-    OrderModule,
+    forwardRef(() => OrderModule),
     MarketDataModule,
     InstrumentModule,
     JwtModule.register({
@@ -30,6 +30,6 @@ import { jwtConstants } from '@modules/auth/constants';
     }),
   ],
   controllers: [WalletController],
-  exports: [WalletUseCase],
+  exports: [WalletUseCase, BalanceAccordingMovementService],
 })
 export class WalletModule {}

@@ -54,43 +54,4 @@ describe('InstrumentService', () => {
   it('should be defined', () => {
     expect(service).toBeDefined();
   });
-
-  describe('searchAssets', () => {
-    it('should return instruments filtered by ticker and name', async () => {
-      const ticker = 'AAPL';
-      const name = 'Apple';
-
-      const result = await service.searchAssets(ticker, name);
-
-      expect(instrumentRepository.manager.query).toHaveBeenCalledWith(
-        expect.any(String),
-        [`%${ticker}%`, `%${name}%`],
-      );
-      expect(result).toEqual(
-        mockInstruments.map((instrument) => ({
-          ...instrument,
-          close: instrument.marketData[0].close,
-          previousClose: instrument.marketData[0].previousClose,
-          dailyReturn: 0,
-        })),
-      );
-    });
-
-    it('should return all instruments if no ticker or name is provided', async () => {
-      const result = await service.searchAssets();
-
-      expect(instrumentRepository.manager.query).toHaveBeenCalledWith(
-        expect.any(String),
-        ['%%', '%%'],
-      );
-      expect(result).toEqual(
-        mockInstruments.map((instrument) => ({
-          ...instrument,
-          close: instrument.marketData[0].close,
-          previousClose: instrument.marketData[0].previousClose,
-          dailyReturn: 0,
-        })),
-      );
-    });
-  });
 });

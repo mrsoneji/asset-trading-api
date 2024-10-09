@@ -21,6 +21,11 @@ export class InstrumentService {
     return this.instrumentRepository.findOneBy({ id });
   }
 
+  // Método para obtener un instrumento por ID
+  async findOneByTicker(ticker: string): Promise<Instrument> {
+    return this.instrumentRepository.findOneBy({ ticker });
+  }
+
   async searchAssets(ticker = '', name = ''): Promise<InstrumentDTO[]> {
     const query = `
     SELECT 
@@ -67,7 +72,7 @@ export class InstrumentService {
         previousClose: instrument.previousclose,
         dailyReturn: latestMarketData
           ? ((instrument.close - instrument.previousclose) /
-          instrument.previousclose) *
+              instrument.previousclose) *
             100
           : 0,
       } as InstrumentDTO;

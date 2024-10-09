@@ -28,6 +28,7 @@ export class BalanceAccordingMovementService {
       NEW: this.subtractAvailableCash,
       FILLED: this.subtractAvailableCash,
       CANCELLED: this.returnAvailableCash,
+      REJECTED: this.returnAvailableCash,
     },
     SELL: {
       FILLED: this.addAvailableCash,

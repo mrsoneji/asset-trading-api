@@ -1,14 +1,23 @@
-import { Controller, Get, Query, Request, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  Query,
+  Request,
+  UseGuards,
+} from '@nestjs/common';
 import { JwtAuthGuard } from '@modules/auth/guards/jwtauth.guard';
 import { User } from '@modules/users/entities/user.entity';
 import { ApiResponse } from '@nestjs/swagger';
 import { RequestOrderDTO } from '../dtos/request-order.dto';
+import { CreateOrderDTO } from '../dtos/create-order.dto';
+import { CreateOrderService } from '../services/create-order.service';
 
 @Controller('/order')
 @UseGuards(JwtAuthGuard)
 export class OrderController {
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  constructor() {}
+  constructor(private readonly createOrderService: CreateOrderService) {}
 
   @ApiResponse({
     status: 200,
@@ -32,5 +41,33 @@ export class OrderController {
   ): Promise<any> {
     const user: User = req.user;
     return JSON.stringify(params, null, 2);
+  }
+
+  @ApiResponse({
+    status: 201,
+    description: 'The order has been created successfully',
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Invalid data, order could not be created',
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'Unauthorized request',
+  })
+  @Post('/')
+  async createOrder(
+    @Request() req: any,
+    @Body() createOrderDto: CreateOrderDTO,
+  ): Promise<any> {
+    const user: User = req.user;
+    const newOrder = await this.createOrderService.execute(
+      user,
+      createOrderDto,
+    );
+    return {
+      message: 'Order created successfully',
+      order: newOrder,
+    };
   }
 }
