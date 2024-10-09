@@ -53,6 +53,21 @@ $ pnpm run test
 
 - Se habilitó un Swagger Doc que se puede acceder por http://localhost:3000/api
 - Los .env para producción deberían agregarse en un Secret Manager o HashiCorp Vault, no es buena práctica publicar los .env, pero al ser una prueba técnica tiene sentido hacerlo.
+- Si bien no pidieron autenticación, se usó un Guard para todos los Controllers con un JWT mínimo donde incluye los datos del usuario, adjunto Bearer sin expiración para cada uno de los usuarios
+
+```
+usuario 1
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiYWNjb3VudG51bWJlciI6IjEwMDAxIiwiZW1haWwiOiJlbWlsaWFub0B0ZXN0LmNvbSJ9.6bmf6UuUd0dlKOdsW6RnGU8L0mC77bERtOFNDb592DQ
+
+usuario 2
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiYWNjb3VudG51bWJlciI6IjEwMDAyIiwiZW1haWwiOiJqb3NlQHRlc3QuY29tIn0.CEVb6YSexudAnOEqIGFzfaAelcikwQH3tyHxIraiJao
+
+usuario 3
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiYWNjb3VudG51bWJlciI6IjEwMDAzIiwiZW1haWwiOiJmcmFuY2lzY29AdGVzdC5jb20ifQ.HS0IbycvHcatyQ9PPaHtjcd_CM_nnQvM75iHd3cI0-A
+
+usuario 4
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwiYWNjb3VudG51bWJlciI6IjEwMDA0IiwiZW1haWwiOiJqdWFuQHRlc3QuY29tIn0.1Ok8rUZc_FMWphr0t5jximtt3HgDekeuzm-FYTbltMc
+```
 
 # cocos-challenge-backend
 
