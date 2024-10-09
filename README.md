@@ -49,11 +49,19 @@ $ pnpm run start:prod
 $ pnpm run test
 ```
 
-## API Documentation
+## Acceso a la Documentación de la API
 
-- Se habilitó un Swagger Doc que se puede acceder por http://localhost:3000/api
-- Los .env para producción deberían agregarse en un Secret Manager o HashiCorp Vault, no es buena práctica publicar los .env, pero al ser una prueba técnica tiene sentido hacerlo.
-- Si bien no pidieron autenticación, se usó un Guard para todos los Controllers con un JWT mínimo donde incluye los datos del usuario, adjunto Bearer sin expiración para cada uno de los usuarios
+Se habilitó una documentación de Swagger que se puede acceder en:
+
+http://localhost:3000/api
+
+## Consideraciones sobre el Uso de Variables de Entorno
+
+Para entornos de producción, se recomienda almacenar los archivos .env en un Secret Manager o HashiCorp Vault, ya que no es buena práctica publicar archivos .env en repositorios públicos. Sin embargo, dado que este es un desafío técnico, se ha decidido hacerlo en este caso.
+
+## Autenticación
+
+Aunque no se solicitó autenticación explícita, se implementó un Guard para todos los controladores. Este Guard utiliza un JWT mínimo que incluye los datos del usuario. A continuación, se adjunta el Bearer sin expiración para cada uno de los usuarios.
 
 ```
 usuario 1
